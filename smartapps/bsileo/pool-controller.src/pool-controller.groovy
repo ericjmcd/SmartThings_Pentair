@@ -1,7 +1,8 @@
 /**
- *  Service Manager for attaching SmartThings to a nodejsPoolController
+ *  Service Manager for attaching SmartThings to a nodejsPoolController through python proxy
  *
  *  Copyright 2018 Brad Sileo
+ *  Modifications Copyright 2021 Eric J McDonald <ericjmcd@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as 
  *  published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
@@ -15,9 +16,9 @@
  */
 definition(
 		name: "Pool Controller",
-		namespace: "bsileo",
-		author: "Brad Sileo",
-		description: "This is a SmartApp to connect to the nodejs_poolController and create devices to manage it within SmartThings",
+		namespace: "ericjmcd",
+		author: "Eric J McDonald",
+		description: "This is a SmartApp to connect to the nodejs_poolController through a python proxy and create devices to manage it within SmartThings",
 		category: "SmartThings Labs",
 		iconUrl: "http://cdn.device-icons.smartthings.com/Health & Wellness/health2-icn.png",
 		iconX2Url: "http://cdn.device-icons.smartthings.com/Health & Wellness/health2-icn@2x.png",
@@ -206,15 +207,21 @@ void ssdpSubscribe() {
 }
 
 def ssdpHandler(evt) {
+    if(evt.name == "ping") {
+        return ""
+    }
 	def description = evt.description
 	def hub = evt?.hubId
+
+    log.debug('PyProxy Received Response: ' + description)
+
 
 	def parsedEvent = parseLanMessage(description)
 	parsedEvent << ["hub":hub]
  	if (parsedEvent?.ssdpTerm?.contains("urn:schemas-upnp-org:device:PoolController:1")) {       
 		def devices = getDevices()
         String ssdpUSN = parsedEvent.ssdpUSN.toString()
-        // log.debug("GET SSDP - found a pool ${parsedEvent}")        
+        log.debug("GET SSDP - found a pool ${parsedEvent}")        
         if (devices."${ssdpUSN}") {
             def d = devices."${ssdpUSN}"
             if (d.networkAddress != parsedEvent.networkAddress || d.deviceAddress != parsedEvent.deviceAddress) {
@@ -229,7 +236,7 @@ def ssdpHandler(evt) {
             devices << ["${ssdpUSN}": parsedEvent]
         }
     }
-    //log.debug("Devices updated! ${devices}")
+    log.debug("Devices updated! ${devices}")
 }
 
 Map verifiedDevices() {
@@ -299,7 +306,7 @@ def createOrUpdateDevice(mac,ip,port) {
    }
    else {
    		log.info "Creating Pool Controller Device with dni: ${mac}"
-		d = addChildDevice("bsileo", "Pentair Pool Controller", mac, hub.id, [
+		d = addChildDevice("ericjmcd", "Pentair Pool Controller", mac, hub.id, [
 			"label": deviceName,
             "completedSetup" : true,
 			"data": [
