@@ -12,18 +12,18 @@
  *
  */
 metadata {
-	definition (name: "Pentair Dummy Tile", namespace: "bsileo", author: "Brad Sileo") {
-    	capability "Switch"
-	}
+    definition (name: "Pentair Dummy Tile", namespace: "bsileo", author: "Brad Sileo") {
+        capability "Switch"
+    }
 
-	tiles {
-		standardTile("dummy", "dummy", width:1, height:1, inactiveLabel: false, decoration: "flat") {
-        	state("dummy", label:'') 
-		}
-                     		
-		main "dummy"
-		details(["dummy"])
-	}
+    tiles {
+        standardTile("dummy", "dummy", width:1, height:1, inactiveLabel: false, decoration: "flat") {
+            state("dummy", label:'') 
+        }
+                             
+        main "dummy"
+        details(["dummy"])
+    }
 }
 
 def installed() {
@@ -38,6 +38,6 @@ def initialize() {
 
 }
 
-def parse(String description) {	
+def parse(String description) {    
 
 }

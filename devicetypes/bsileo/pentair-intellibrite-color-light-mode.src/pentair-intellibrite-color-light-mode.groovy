@@ -9,62 +9,62 @@
  *  Date: 2018-10-21
  */
 metadata {
-	definition (name: "Pentair Intellibrite Color Light Mode", namespace: "bsileo", author: "Brad Sileo") {
-		capability "Actuator"
-		capability "Switch"
-		capability "Momentary"
-		capability "Sensor"
-	}
+    definition (name: "Pentair Intellibrite Color Light Mode", namespace: "bsileo", author: "Brad Sileo") {
+        capability "Actuator"
+        capability "Switch"
+        capability "Momentary"
+        capability "Sensor"
+    }
 
-	// simulator metadata
-	simulator {
-	}
+    // simulator metadata
+    simulator {
+    }
 
-	// UI tile definitions
-	tiles {
-		standardTile("switch", "device.switch", width: 2, height: 2, canChangeIcon: true) {
-			state "off", label: "", action: "momentary.push", backgroundColor: "#ffffff", nextState: "on"
-			state "on", label: "", action: "momentary.push", icon:"st.Lighting.light21", backgroundColor: "#ffffff"
+    // UI tile definitions
+    tiles {
+        standardTile("switch", "device.switch", width: 2, height: 2, canChangeIcon: true) {
+            state "off", label: "", action: "momentary.push", backgroundColor: "#ffffff", nextState: "on"
+            state "on", label: "", action: "momentary.push", icon:"st.Lighting.light21", backgroundColor: "#ffffff"
 
-			state "Party", label:"", action:"momentary.push", icon:"https://bsileo.github.io/SmartThings_Pentair/party.png", backgroundColor:"#4250f4", nextState:"on"
+            state "Party", label:"", action:"momentary.push", icon:"https://bsileo.github.io/SmartThings_Pentair/party.png", backgroundColor:"#4250f4", nextState:"on"
             state "Romance", label:"", action:"momentary.push", icon:"https://bsileo.github.io/SmartThings_Pentair/romance.png", backgroundColor:"#d28be8", nextState:"on"
             state "Caribbean", label:"", action:"momentary.push", icon:"https://bsileo.github.io/SmartThings_Pentair/caribbean.png", backgroundColor:"#46f2e9", nextState:"on"        
             state "American", label:"", action:"momentary.push", icon:"https://bsileo.github.io/SmartThings_Pentair/american.png", backgroundColor:"#d42729", nextState:"on"        
             state "Sunset", label:"", action:"momentary.push", icon:"https://bsileo.github.io/SmartThings_Pentair/sunset.png", backgroundColor:"#ffff00", nextState:"on"        
             state "Royal", label:"", action:"momentary.push", icon:"https://bsileo.github.io/SmartThings_Pentair/royal.png", backgroundColor:"#9933ff", nextState:"on"        
 
-			state "Blue", label:"Blue", action: "momentary.push", icon:"st.Lighting.light21", backgroundColor:"#0000FF", nextState:"on"
-		    state "Green", label:"Green", action: "momentary.push", icon:"st.Lighting.light21", backgroundColor:"#33cc33", nextState:"on"
-			state "Red", label: "Red", action: "momentary.push", icon:"st.Lighting.light21",backgroundColor: "#bc3a2f", nextState: "on"
+            state "Blue", label:"Blue", action: "momentary.push", icon:"st.Lighting.light21", backgroundColor:"#0000FF", nextState:"on"
+            state "Green", label:"Green", action: "momentary.push", icon:"st.Lighting.light21", backgroundColor:"#33cc33", nextState:"on"
+            state "Red", label: "Red", action: "momentary.push", icon:"st.Lighting.light21",backgroundColor: "#bc3a2f", nextState: "on"
             state "White", label:"White", action:"momentary.push", icon:"st.Lighting.light21", backgroundColor:"#ffffff", nextState:"on"
             state "Magenta", label:"Magenta", action:"momentary.push", icon:"st.Lighting.light21", backgroundColor:"#ff00ff", nextState:"on"
             
-		}
-		main "switch"
-		details "switch"
-	}
+        }
+        main "switch"
+        details "switch"
+    }
 }
 
 
 def installed() {
-	log.debug("Installed Intellibrite Color Mode color=" + device.deviceNetworkId)
+    log.debug("Installed Intellibrite Color Mode color=" + device.deviceNetworkId)
     def mode = getDataValue("modeName")
-	sendEvent(name: "switch", value: mode, isStateChange: true, displayed: false)
+    sendEvent(name: "switch", value: mode, isStateChange: true, displayed: false)
 }
 
 def parse(String description) {
 }
 
 def push() {
-	sendEvent(name: "switch", value: "on", isStateChange: true, displayed: false)
+    sendEvent(name: "switch", value: "on", isStateChange: true, displayed: false)
     def mode = getDataValue("modeName")
     def circuitID = getDataValue("circuitID")
     parent.setColor(circuitID, getColorOrModeID())
- 	sendEvent(name: "switch", value: mode, isStateChange: true, displayed: false)	
+     sendEvent(name: "switch", value: mode, isStateChange: true, displayed: false)    
 }
 
 def getColorOrModeID() {
-	def colorID 
+    def colorID 
     def colorIDLookup = ["White" : 0,
         "Custom" :1,
         "Light Green":2,
@@ -98,9 +98,9 @@ def getColorOrModeID() {
 }
 
 def on() {
-	push()
+    push()
 }
 
 def off() {
-	push()
+    push()
 }
