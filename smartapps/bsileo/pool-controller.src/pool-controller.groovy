@@ -235,7 +235,13 @@ def ssdpHandler(evt) {
         } else {
             devices << ["${ssdpUSN}": parsedEvent]
         }
+    } else {
+        log.debug("ParsedEvent:ssdpTerm: " + parsedEvent?.ssdpTerm?)
+    } else {
+    
+        log.debug("ParsedEvent:ssdpTerm: " + parsedEvent?.ssdpTerm?)
     }
+    
     log.debug("Devices updated! ${devices}")
 }
 
