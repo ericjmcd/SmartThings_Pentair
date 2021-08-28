@@ -212,11 +212,8 @@ def ssdpHandler(evt) {
     }
     def description = evt.description
     def hub = evt?.hubId
-
-
-
     def parsedEvent = parseLanMessage(description)
-    log.debug('PyProxy parsedEvent: ' + parsedEvent)
+    log.debug("PyProxy parsedEvent: " + parsedEvent)
     parsedEvent << ["hub":hub]
     if (parsedEvent?.ssdpTerm?.contains("urn:schemas-upnp-org:device:PoolController:1")) {
         def devices = getDevices()
