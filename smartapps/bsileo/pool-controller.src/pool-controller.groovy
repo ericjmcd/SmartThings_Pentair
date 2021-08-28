@@ -218,7 +218,7 @@ def ssdpHandler(evt) {
 
 	def parsedEvent = parseLanMessage(description)
 	parsedEvent << ["hub":hub]
- 	if (parsedEvent?.ssdpTerm?.contains("urn:schemas-upnp-org:device:PoolController:1")) {       
+ 	if (parsedEvent?.ssdpTerm?.contains("urn:schemas-upnp-org:device:PoolController:1")) {
 		def devices = getDevices()
         String ssdpUSN = parsedEvent.ssdpUSN.toString()
         log.debug("GET SSDP - found a pool ${parsedEvent}")        
@@ -236,9 +236,6 @@ def ssdpHandler(evt) {
             devices << ["${ssdpUSN}": parsedEvent]
         }
     } else {
-        log.debug("ParsedEvent:ssdpTerm: " + parsedEvent?.ssdpTerm?)
-    } else {
-    
         log.debug("ParsedEvent:ssdpTerm: " + parsedEvent?.ssdpTerm?)
     }
     
