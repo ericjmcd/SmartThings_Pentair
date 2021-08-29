@@ -37,11 +37,11 @@ def deviceDiscovery() {
     state.config=false
     log.debug("DevDisc ${devices}")
     devices.each {
-        //log.debug("Processing ${it}-->${it.value}")
+        log.debug("Processing ${it}-->${it.value}")
         def value = it.value.name ?: "Pool Controller ${it.value.mac}"
         def key = it.value.mac
         options["${key}"] = value
-        //log.debug("SSDP ${key} = ${it.value}")
+        log.debug("SSDP ${key} = ${it.value}")
     }
     /*log.debug("Check Manual device?-- IP:${controllerIP}:${controllerPort}=${controllerMac}")
     if (controllerIP && controllerPort && controllerMac) {
@@ -66,10 +66,12 @@ def deviceDiscovery() {
     ssdpSubscribe()
     ssdpDiscover()
     verifyDevices()
-         
-    return dynamicPage(name: "deviceDiscovery", title: "Locate Pool Controller...", nextPage: "poolConfig", refreshInterval: 5, install: false, uninstall: true) {        
+
+    return dynamicPage(name: "deviceDiscovery", title: "Locate Pool Controller...", nextPage: "poolConfig", install: false, uninstall: true) {
         section("Please wait while we discover your nodejs-poolController. Discovery can take some time...Select your device below once discovered.", hideable:false, hidden:false) {
             input "selectedDevice", "enum", required: false, title: "Select A Device (${options.size() ?: 0} found)", multiple: false, options: options
+            //input(name: "selectedDevice", type: "enum", required: false, title: "Select A Device (${options.size() ?: 0} found)", multiple: true, options: options, refreshAfterSelection:false)
+            input(name: "refreshDev", type: "boolean", title: "Refresh", submitOnChange:true)
         }
         /*section("Manual poolController Configuration (Optional)", hideable:true, hidden:false) {
             input "controllerIP", "text", title: "Controller IP Address", required: false, displayDuringSetup: true, defaultValue:""
@@ -101,6 +103,7 @@ def poolConfig() {
         return dynamicPage(name: "poolConfig", title: "Getting Pool Configuration...", nextPage: "", refreshInterval: 2,install: false, uninstall: false) {
         section("Name:") {
             input name:"deviceName", type:"text", title: "Enter the name for your device", required:true, defaultValue:"Pool"
+            input(name: "refreshDev", type: "boolean", title: "Refresh", submitOnChange:true)
             }
         getPoolConfig()
         }
@@ -108,7 +111,8 @@ def poolConfig() {
 }
 
 def getPoolConfig() {
-     state.config=false    
+    log.debug("GetPoolConfig")
+    state.config=false    
     def devMAC = selectedDevice    
     def devices = getVerifiedDevices()
     def selectedDeviceInfo = devices.find { it.value.mac == devMAC } 
@@ -116,7 +120,7 @@ def getPoolConfig() {
         log.debug "Configure [${selectedDeviceInfo.value.mac}]"
         def params = [
             method: "GET",
-            path: "/all",
+            path: "/config/all",
             headers: [
                 HOST: "${selectedDeviceInfo.value.networkAddress}:${selectedDeviceInfo.value.deviceAddress}",
                 "Accept":"application/json" 
@@ -140,21 +144,24 @@ def getPoolConfig() {
 }
 
 def parseConfig(resp) {
+    log.debug("Confg response: " + resp.description)
     def message = parseLanMessage(resp.description)   
-    def msg = message.json
-    log.debug("parseConfig - msg=${msg.config}")        
-    log.debug("parseConfig-circuit - msg=${msg.circuit}")
-    state.includeSolar = msg.config.equipment.solar.installed == 1
-    state.includeChem = msg.config.equipment.intellichem.installed == 1
-    state.includeChlor = msg.config.equipment.chlorinator.installed == 1
-    state.includeSpa = msg.config.equipment.spa.installed == 1
-    state.pumps = msg.config.equipment.pump
-    state.controller = msg.config.equipment.controller
-    state.circuitHudeAux = msg.config.equipment.circuit.hideAux
-    state.numCircuits =  msg.config.equipment.circuit.nonLightCircuit.size() + msg.config.equipment.circuit.lightCircuit.size()
-    state.nonLightCircuits = msg.config.equipment.circuit.nonLightCircuit
-    state.lightCircuits = msg.config.equipment.circuit.lightCircuit
-    state.circuitData = msg.circuit
+    log.debug("Message: "  + message)
+    def msg = message.json    
+    log.debug("parseConfig - msg=${msg.eqiupment}")
+    log.debug("parseConfig-circuit - msg=${msg.equipment.equipmentIds.circuit}")
+    // FIXME - need to redo parsing as the response completely changed
+    state.includeSolar = true //msg.equipment.solar.installed == 1
+    state.includeChem = false //msg.equipment.intellichem.installed == 1
+    state.includeChlor = false //msg.equipment.chlorinator.installed == 1
+    state.includeSpa = true //msg.equipment.spa.installed == 1
+    state.pumps = msg.pumps
+    state.controller = msg.controllerType
+    state.circuitHudeAux = true //msg.equipment.circuit.hideAux
+    state.numCircuits =  msg.equipment.maxCircuits
+    state.nonLightCircuits = msg.circuits
+    state.lightCircuits = Null // msg.config.equipment.circuit.lightCircuit
+    state.circuitData = msg.lCircuits
     state.config=true
     log.info "STATE=${state}"
 }
@@ -193,7 +200,7 @@ def USN() {
 
 void ssdpDiscover() {
     def searchTarget = "lan discovery " + USN()
-    //log.debug("Send command '${searchTarget}'")
+    log.debug("Send command '${searchTarget}'")
     sendHubCommand(new physicalgraph.device.HubAction("${searchTarget}", physicalgraph.device.Protocol.LAN))
 }
 
@@ -213,7 +220,7 @@ def ssdpHandler(evt) {
     def description = evt.description
     def hub = evt?.hubId
     def parsedEvent = parseLanMessage(description)
-    log.debug("PyProxy parsedEvent: " + parsedEvent)
+    //log.debug("PyProxy parsedEvent: " + parsedEvent)
     parsedEvent << ["hub":hub]
     if (parsedEvent?.ssdpTerm?.contains("urn:schemas-upnp-org:device:PoolController:1")) {
         def devices = getDevices()
@@ -229,28 +236,30 @@ def ssdpHandler(evt) {
                     child.sync(parsedEvent.networkAddress, parsedEvent.deviceAddress)
                 }
             }
+            log.debug("Devices (nothing new): ${devices}")
         } else {
+            log.debug("New device " + ssdpUSN)
             devices << ["${ssdpUSN}": parsedEvent]
+            log.debug("Updated devices: ${devices}")
         }
-    } else {
-        log.debug("ParsedEvent:ssdpTerm: " + parsedEvent.ssdpTerm)
     }
-    
-    log.debug("Devices updated! ${devices}")
 }
 
 Map verifiedDevices() {
     def devices = getVerifiedDevices()
     def map = [:]
+    log.error("verifiedDevices called")
     devices.each {
         def value = it.value.name ?: "UPnP Device ${it.value.ssdpUSN.split(':')[1][-3..-1]}"
         def key = it.value.mac
+        log.info("Setting device mac: " + key)
         map["${key}"] = value
     }
     map
 }
 
 void verifyDevices() {
+    log.debug("Verifying devices")
     def devices = getDevices().findAll { it?.value?.verified != true }
     devices.each {
         int port = convertHexToInt(it.value.deviceAddress)
@@ -305,8 +314,8 @@ def createOrUpdateDevice(mac,ip,port) {
         d.manageChildren()
    }
    else {
-           log.info "Creating Pool Controller Device with dni: ${mac}"
-        d = addChildDevice("ericjmcd", "Pentair Pool Controller", mac, hub.id, [
+        log.info "Creating Pool Controller Device with dni: ${mac}"
+        /*d = addChildDevice("ericjmcd", "Pentair Pool Controller", mac, hub.id, [
             "label": deviceName,
             "completedSetup" : true,
             "data": [
@@ -322,6 +331,7 @@ def createOrUpdateDevice(mac,ip,port) {
                 'lightCircuits':state.lightCircuits
                 ]
             ])
+            */
    }
 }
 
@@ -333,8 +343,11 @@ void deviceDescriptionHandler(physicalgraph.device.HubResponse hubResponse) {
     def devices = getDevices()
     if (body) {            
         def device = devices.find { it?.key?.contains(body?.device?.UDN?.text()) }
+        log.info("Device: " + device)
+        log.info("Device body: " + body)
         if (device) {
-            device.value << [name: body?.device?.roomName?.text(), model:body?.device?.modelName?.text(), serialNumber:body?.device?.serialNum?.text(), verified: true]
+            //Orig device.value << [name: body?.device?.roomName?.text(), model:body?.device?.modelName?.text(), serialNumber:body?.device?.serialNum?.text(), verified: true]
+            device.value << [name: "Pool", model:"EasyTouch2", serialNumber:body?.device?.serialNum?.text(), verified: true]
             log.info("Verified a device - device.value > ${device.value}")
         }
         

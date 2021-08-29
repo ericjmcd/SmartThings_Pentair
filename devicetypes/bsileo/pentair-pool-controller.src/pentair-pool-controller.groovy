@@ -2,7 +2,7 @@ import groovy.util.Eval;
 
 
 metadata {
-    definition (name: "Pentair Pool Controller", namespace: "bsileo", author: "Brad Sileo") {
+    definition (name: "Pentair Pool Controller", namespace: "ericjmcd", author: "Eric J McDonald") {
        capability "Polling"
        capability "Refresh"
        capability "Configuration"
@@ -208,20 +208,20 @@ def manageChildren() {
     def hub = location.hubs[0]    
     def poolHeat = childDevices.find({it.deviceNetworkId == getChildDNI("poolHeat")})
     if (!poolHeat) {
-        poolHeat = addChildDevice("bsileo","Pentair Water Thermostat", getChildDNI("poolHeat"), hub.id, 
+        poolHeat = addChildDevice("ericjmcd","Pentair Water Thermostat", getChildDNI("poolHeat"), hub.id, 
                                   [completedSetup: true, label: "${device.displayName} (Pool Heat)" , isComponent:false, componentName: "poolHeat", componentLabel:"${device.displayName} (Pool Heat)" ])
         log.debug "Created PoolHeat" 
     }
     if (getDataValue("includeSpa")=='true') {
         def spaHeat = childDevices.find({it.deviceNetworkId == getChildDNI("spaHeat")})
         if (!spaHeat) {
-            spaHeat = addChildDevice("bsileo","Pentair Water Thermostat", getChildDNI("spaHeat"), hub.id, 
+            spaHeat = addChildDevice("ericjmcd","Pentair Water Thermostat", getChildDNI("spaHeat"), hub.id, 
                                      [completedSetup: true, label: "${device.displayName} (Spa Heat)" , isComponent:false, componentName: "spaHeat", componentLabel:"${device.displayName} (Spa Heat)" ])
             log.debug "Created SpaHeat"
         }
         def spaPump = childDevices.find({it.deviceNetworkId == getChildDNI("spaPump")})
         if (!spaPump) {
-            spaHeat = addChildDevice("bsileo","Pentair Spa Pump Control", getChildDNI("spaPump"), hub.id, 
+            spaHeat = addChildDevice("ericjmcd","Pentair Spa Pump Control", getChildDNI("spaPump"), hub.id, 
                                      [completedSetup: true, label: "${device.displayName} (Spa Pump)" , isComponent:false, componentName: "spaPump", componentLabel:"${device.displayName} (Spa Pump)" ])
             log.debug "Created SpaPump Child"
         }
@@ -233,7 +233,7 @@ def manageChildren() {
 
     def airTemp = childDevices.find({it.deviceNetworkId == getChildDNI("airTemp")})
     if (!airTemp) {
-        airTemp = addChildDevice("bsileo","Pentair Temperature Measurement Capability", getChildDNI("airTemp"), hub.id, 
+        airTemp = addChildDevice("ericjmcd","Pentair Temperature Measurement Capability", getChildDNI("airTemp"), hub.id, 
                                  [ label: "${device.displayName} Air Temperature", componentName: "airTemp", componentLabel: "${device.displayName} Air Temperature",
                                   isComponent:false, completedSetup:true])                    
     }
@@ -243,7 +243,7 @@ def manageChildren() {
         def solarTemp = childDevices.find({it.deviceNetworkId == getChildDNI("solarTemp")})        
         if (!solarTemp) {
             log.debug("Create Solar temp")
-            solarTemp = addChildDevice("bsileo","Pentair Temperature Measurement Capability", getChildDNI("solarTemp"), hub.id, 
+            solarTemp = addChildDevice("ericjmcd","Pentair Temperature Measurement Capability", getChildDNI("solarTemp"), hub.id, 
                                    [ label: "${device.displayName} Solar Temperature", componentName: "solarTemp", componentLabel: "${device.displayName} Solar Temperature",
                                     isComponent:false, completedSetup:true])        
         }
@@ -252,7 +252,7 @@ def manageChildren() {
          def solarTemp = childDevices.find({it.deviceNetworkId == getChildDNI("solarDummy")})
          if (!solarTemp) {
             log.debug("Create Solar dummy")
-            solarTemp = addChildDevice("bsileo","Pentair Dummy Tile", getChildDNI("solarDummy"), hub.id, 
+            solarTemp = addChildDevice("ericjmcd","Pentair Dummy Tile", getChildDNI("solarDummy"), hub.id, 
                                    [ label: "${device.displayName} Solar Dummy", componentName: "solarDummy", componentLabel: "${device.displayName} Solar Dummy",
                                     isComponent:false, completedSetup:true])
          }
@@ -263,13 +263,13 @@ def manageChildren() {
     def ichlor = childDevices.find({it.deviceNetworkId == getChildDNI("poolChlorinator")})
     if (!ichlor && getDataValue("includeChlorinator")=='true') {
         log.debug("Create Chlorinator")
-        ichlor = addChildDevice("bsileo","Pentair Chlorinator", getChildDNI("poolChlorinator"), hub.id, 
+        ichlor = addChildDevice("ericjmcd","Pentair Chlorinator", getChildDNI("poolChlorinator"), hub.id, 
                                 [ label: "${device.displayName} Chlorinator", componentName: "poolChlorinator", componentLabel: "${device.displayName} Chlorinator",
                                  isComponent:true, completedSetup:true])        
     }  
     def ichem = childDevices.find({it.deviceNetworkId == getChildDNI("poolIntellichem")})
     if (!ichem && getDataValue("includeIntellichem")=='true') {          
-        ichem = addChildDevice("bsileo","Pentair Intellichem", getChildDNI("poolIntellichem"), hub.id, 
+        ichem = addChildDevice("ericjmcd","Pentair Intellichem", getChildDNI("poolIntellichem"), hub.id, 
                                [ label: "${device.displayName} Intellichem", componentName: "poolIntellichem", componentLabel: "${device.displayName} Intellichem",
                                 isComponent:false, completedSetup:true])  
     }   
@@ -307,7 +307,7 @@ def makeLightCircuit(circuitID) {
             def auxButton = childDevices.find({it.deviceNetworkId == getChildDNI(auxname)})
             if (!auxButton) {
                 log.info "Create Light switch ${auxLabel} Named=${auxname}" 
-                auxButton = addChildDevice("bsileo","Pentair Pool Light Switch", getChildDNI(auxname), hub.id, 
+                auxButton = addChildDevice("ericjmcd","Pentair Pool Light Switch", getChildDNI(auxname), hub.id, 
                                            [completedSetup: true, label: auxLabel , isComponent:false, componentName: auxname, componentLabel: auxLabel,
                                            data:[circuitID:circuitID]
                                            ])
@@ -333,7 +333,7 @@ def makeIntellibriteLightCircuit(circuitID,instance) {
             def auxButton = childDevices.find({it.deviceNetworkId == getChildDNI(auxname)})
             if (!auxButton) {
                 log.info "Create Light switch ${auxLabel} Named=${auxname}" 
-                auxButton = addChildDevice("bsileo","Pentair Intellibrite Color Light", getChildDNI(auxname), hub.id, 
+                auxButton = addChildDevice("ericjmcd","Pentair Intellibrite Color Light", getChildDNI(auxname), hub.id, 
                                            [completedSetup: true, label: auxLabel , isComponent:false, componentName: auxname, componentLabel: auxLabel,
                                            data:[circuitID:circuitID, instanceID:instance]
                                            ])
@@ -368,7 +368,7 @@ def manageIntellibriteModes(instanceID, fName, circuitID) {
         log.debug ("Create " + it + " ${displayName}::${deviceID}==${cDNI}" )
         if (!existingButton){                
                 try{                           
-                    def cButton = addChildDevice("bsileo", "Pentair Intellibrite Color Light Mode", cDNI, hub.id, 
+                    def cButton = addChildDevice("ericjmcd", "Pentair Intellibrite Color Light Mode", cDNI, hub.id, 
                              [ label: displayName, componentName: deviceID, componentLabel: deviceID,
                              isComponent:true, completedSetup:true,
                              data: [modeName:it, circuitID:circuitID]
@@ -403,7 +403,7 @@ def managePumps() {
                 def pump = childDevices.find({it.deviceNetworkId == childDNI})
                 if (!pump) {
                     log.info "Create Pump Controller Named=${pumpName}" 
-                    pump = addChildDevice("bsileo","Pentair Pump Control", childDNI, hub.id, 
+                    pump = addChildDevice("ericjmcd","Pentair Pump Control", childDNI, hub.id, 
                                                [completedSetup: true, label: pumpFName , isComponent:false, componentName: pumpName, componentLabel: pumpName, 
                                                data: [
                                                 type: data['type'],
@@ -441,7 +441,7 @@ def manageFeatureCircuits() {
             def auxButton = childDevices.find({it.deviceNetworkId == getChildDNI(auxname)})
             if (!auxButton) {
                 log.info "Create Aux Circuit switch ${auxLabel} Named=${auxname}" 
-                auxButton = addChildDevice("bsileo","Pentair Pool Control Switch", getChildDNI(auxname), hub.id, 
+                auxButton = addChildDevice("ericjmcd","Pentair Pool Control Switch", getChildDNI(auxname), hub.id, 
                                            [completedSetup: true, label: auxLabel , isComponent:false, componentName: auxname, componentLabel: auxLabel, 
                                            data: [type:cData.circuitFunction]
                                            ])
