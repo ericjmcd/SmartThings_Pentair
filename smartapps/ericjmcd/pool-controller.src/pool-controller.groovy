@@ -315,7 +315,7 @@ def createOrUpdateDevice(mac,ip,port) {
    }
    else {
         log.info "Creating Pool Controller Device with dni: ${mac}"
-        /*d = addChildDevice("ericjmcd", "Pentair Pool Controller", mac, hub.id, [
+        d = addChildDevice("ericjmcd", "Pentair Pool Controller", mac, hub.id, [
             "label": deviceName,
             "completedSetup" : true,
             "data": [
@@ -331,7 +331,6 @@ def createOrUpdateDevice(mac,ip,port) {
                 'lightCircuits':state.lightCircuits
                 ]
             ])
-            */
    }
 }
 
