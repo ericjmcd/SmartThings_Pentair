@@ -8,7 +8,7 @@ metadata {
         capability "Power Meter"
         command onConfirmed
         command offConfirmed
-        attribute "name", "string"
+        //attribute "pumpName", "string"
         attribute "circuitID","string"
         attribute "pumpID","string"
     }
@@ -79,7 +79,7 @@ def parsePumpData(pumpInfo) {
          def programMode = pumpInfo['currentrunning']?.mode
          def programDuration = pumpInfo['currentrunning']?.remainingduration
          def programRPM = pumpInfo['currentrunning']?.value
-         def name = pumpInfo.name
+         def nameID = pumpInfo.nameID
          def name = pumpInfo.name
          sendEvent(name: "name", value: name, isStateChange: true, displayed: false)         
          def mode = pumpInfo.mode
