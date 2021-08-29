@@ -399,14 +399,14 @@ def managePumps() {
     pumps.each {id,data ->
         try {
             if (data['type'] != 'none') {
-                def pumpName = "PumpID${id}"
+                def pumpID = "PumpID${id}"
                 def pumpName = "Pump # ${id}"
                 def childDNI = getChildDNI(pumpName)
                 def pump = childDevices.find({it.deviceNetworkId == childDNI})
                 if (!pump) {
                     log.info "Create Pump Controller Named=${pumpName}" 
                     pump = addChildDevice("ericjmcd","Pentair Pump Control", childDNI, hub.id, 
-                                               [completedSetup: true, label: pumpName , isComponent:false, componentName: pumpName, componentLabel: pumpName, 
+                                               [completedSetup: true, label: pumpName , isComponent:false, componentName: pumpID, componentLabel: pumpName, 
                                                data: [
                                                 type: data['type'],
                                                 name: data['name'],
