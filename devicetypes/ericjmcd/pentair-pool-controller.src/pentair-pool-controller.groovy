@@ -396,9 +396,10 @@ def managePumps() {
     def hub = location.hubs[0]   
     def pumps = parent.state.pumps
     log.debug("parent.state.pumps: " + pumps)
-    pumps.each {id,data ->
+    pumps.each {i,data ->
         try {
-            if (data['type'] != 'none') {
+            if (data['type'] != 0) {
+                def id = data['id']
                 def pumpID = "PumpID${id}"
                 def pumpName = "Pump # ${id}"
                 def childDNI = getChildDNI(pumpName)
@@ -411,7 +412,6 @@ def managePumps() {
                                                 type: data['type'],
                                                 name: data['name'],
                                                 pumpID: id,
-                                                externalProgram: data['externalProgram']
                                                 ]
                                                ])
                     log.debug "Success - Created Pump ID ${id}" 
