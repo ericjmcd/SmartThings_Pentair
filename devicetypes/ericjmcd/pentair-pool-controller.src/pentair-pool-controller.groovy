@@ -206,12 +206,13 @@ def updated() {
 def manageChildren() {
     log.debug "Pool Controller manageChildren..."
     def hub = location.hubs[0]    
-    def poolHeat = childDevices.find({it.deviceNetworkId == getChildDNI("poolHeat")})
-    if (!poolHeat) {
+    def poolHeat = childDevices.find({it.deviceNetworkId == getChildDNI("poolHeat")})    
+    /*if (!poolHeat) {
         poolHeat = addChildDevice("ericjmcd","Pentair Water Thermostat", getChildDNI("poolHeat"), hub.id, 
                                   [completedSetup: true, label: "${device.displayName} (Pool Heat)" , isComponent:false, componentName: "poolHeat", componentLabel:"${device.displayName} (Pool Heat)" ])
         log.debug "Created PoolHeat" 
-    }
+    }*/
+    /*
     if (getDataValue("includeSpa")=='true') {
         def spaHeat = childDevices.find({it.deviceNetworkId == getChildDNI("spaHeat")})
         if (!spaHeat) {
@@ -225,21 +226,21 @@ def manageChildren() {
                                      [completedSetup: true, label: "${device.displayName} (Spa Pump)" , isComponent:false, componentName: "spaPump", componentLabel:"${device.displayName} (Spa Pump)" ])
             log.debug "Created SpaPump Child"
         }
-    }    
-    manageIntellibriteLights()
-    managePumps()
+    }*/   
+    //manageIntellibriteLights()
+    //managePumps()
     manageCircuits()
 
 
-    def airTemp = childDevices.find({it.deviceNetworkId == getChildDNI("airTemp")})
+    /*def airTemp = childDevices.find({it.deviceNetworkId == getChildDNI("airTemp")})
     if (!airTemp) {
         airTemp = addChildDevice("ericjmcd","Pentair Temperature Measurement Capability", getChildDNI("airTemp"), hub.id, 
                                  [ label: "${device.displayName} Air Temperature", componentName: "airTemp", componentLabel: "${device.displayName} Air Temperature",
                                   isComponent:false, completedSetup:true])                    
-    }
+    }*/
 
     
-    if (getDataValue("includeSolar")=='true') {    
+    /*if (getDataValue("includeSolar")=='true') {    
         def solarTemp = childDevices.find({it.deviceNetworkId == getChildDNI("solarTemp")})        
         if (!solarTemp) {
             log.debug("Create Solar temp")
@@ -256,23 +257,23 @@ def manageChildren() {
                                    [ label: "${device.displayName} Solar Dummy", componentName: "solarDummy", componentLabel: "${device.displayName} Solar Dummy",
                                     isComponent:false, completedSetup:true])
          }
-    }
+    }*/
     
     
 
-    def ichlor = childDevices.find({it.deviceNetworkId == getChildDNI("poolChlorinator")})
+    /*def ichlor = childDevices.find({it.deviceNetworkId == getChildDNI("poolChlorinator")})
     if (!ichlor && getDataValue("includeChlorinator")=='true') {
         log.debug("Create Chlorinator")
         ichlor = addChildDevice("ericjmcd","Pentair Chlorinator", getChildDNI("poolChlorinator"), hub.id, 
                                 [ label: "${device.displayName} Chlorinator", componentName: "poolChlorinator", componentLabel: "${device.displayName} Chlorinator",
                                  isComponent:true, completedSetup:true])        
-    }  
-    def ichem = childDevices.find({it.deviceNetworkId == getChildDNI("poolIntellichem")})
+    }*/
+    /*def ichem = childDevices.find({it.deviceNetworkId == getChildDNI("poolIntellichem")})
     if (!ichem && getDataValue("includeIntellichem")=='true') {          
         ichem = addChildDevice("ericjmcd","Pentair Intellichem", getChildDNI("poolIntellichem"), hub.id, 
                                [ label: "${device.displayName} Intellichem", componentName: "poolIntellichem", componentLabel: "${device.displayName} Intellichem",
                                 isComponent:false, completedSetup:true])  
-    }   
+    }*/  
 }
 
 def manageIntellibriteLights() {
@@ -394,20 +395,21 @@ def managePumps() {
     log.debug "Create/Update Pumps for this device"
     def hub = location.hubs[0]   
     def pumps = parent.state.pumps
+    log.debug("parent.state.pumps: " + pumps)
     pumps.each {id,data ->
         try {
             if (data['type'] != 'none') {
                 def pumpName = "PumpID${id}"
-                def pumpFName = "Pump # ${id}"
+                def pumpName = "Pump # ${id}"
                 def childDNI = getChildDNI(pumpName)
                 def pump = childDevices.find({it.deviceNetworkId == childDNI})
                 if (!pump) {
                     log.info "Create Pump Controller Named=${pumpName}" 
                     pump = addChildDevice("ericjmcd","Pentair Pump Control", childDNI, hub.id, 
-                                               [completedSetup: true, label: pumpFName , isComponent:false, componentName: pumpName, componentLabel: pumpName, 
+                                               [completedSetup: true, label: pumpName , isComponent:false, componentName: pumpName, componentLabel: pumpName, 
                                                data: [
                                                 type: data['type'],
-                                                friendlyName: data['friendlyName'],
+                                                name: data['name'],
                                                 pumpID: id,
                                                 externalProgram: data['externalProgram']
                                                 ]
@@ -434,9 +436,10 @@ def manageFeatureCircuits() {
     def nLCircuits = parent.state.nonLightCircuits
     nLCircuits.each {i,k ->
         def cData = parent.state.circuitData[i.toString()]
-        if (cData.friendlyName == "NOT USED") return        
+        log.debug("Handling circuit: " + cData.name)
+        if (cData.name == "Not Used" || cData.name == "NOT USED") return        
         def auxname = "circuit${i}"        
-        def auxLabel = "${device.displayName} (${cData.friendlyName})"        
+        def auxLabel = "${device.displayName} (${cData.name})"        
         try {
             def auxButton = childDevices.find({it.deviceNetworkId == getChildDNI(auxname)})
             if (!auxButton) {
@@ -554,7 +557,7 @@ def parseCircuits(msg) {
                 sendEvent(name: "switch", value: status, displayed:true)            
             }
              child.setCircuitFunction("${it.value.circuitFunction}")
-            child.setFriendlyName("${it.value.friendlyName}")               
+            child.setname("${it.value.name}")               
 
             sendEvent(name: "circuit${currentID}", value:status, 
                              displayed:true, descriptionText:"Circuit ${child.label} set to ${status}" 
@@ -774,7 +777,7 @@ def spaPumpCircuitID() {
 }
 
 def childofType(type) {
-    //return childDevices.find({it.currentFriendlyName == type})
+    //return childDevices.find({it.currentname == type})
     return childDevices.find({it.currentcircuitFunction == type})
 }
 

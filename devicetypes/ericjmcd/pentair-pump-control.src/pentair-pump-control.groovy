@@ -8,7 +8,7 @@ metadata {
         capability "Power Meter"
         command onConfirmed
         command offConfirmed
-        attribute "friendlyName", "string"
+        attribute "name", "string"
         attribute "circuitID","string"
         attribute "pumpID","string"
     }
@@ -34,7 +34,7 @@ metadata {
                 attributeState "turningOff", label:'${name}', icon:"http://cdn.device-icons.smartthings.com/Weather/weather12-icn@2x.png", backgroundColor:"#ffffff", nextState: "off"                      
             }             
             // Note - this Approach works to display this name in the Child Device but does not carry through to the parent. Multi-attribute tiles do not work on a childTile??
-            tileAttribute ("device.friendlyName", key: "SECONDARY_CONTROL") {
+            tileAttribute ("device.name", key: "SECONDARY_CONTROL") {
                 attributeState "name", label:'${currentValue}'
             }        
         }
@@ -69,8 +69,8 @@ def manageData() {
     sendEvent(name: "circuitID", value: cid, isStateChange: true, displayed: false)
     def pid = getDataValue("pumpID")
     sendEvent(name: "pumpID", value: pid, isStateChange: true, displayed: false)
-    def name = getDataValue("friendlyName")
-    sendEvent(name: "friendlyName", value: name, isStateChange: true, displayed: false)
+    def name = getDataValue("name")
+    sendEvent(name: "name", value: name, isStateChange: true, displayed: false)
 }
 
 def parsePumpData(pumpInfo) {
@@ -79,9 +79,9 @@ def parsePumpData(pumpInfo) {
          def programMode = pumpInfo['currentrunning']?.mode
          def programDuration = pumpInfo['currentrunning']?.remainingduration
          def programRPM = pumpInfo['currentrunning']?.value
-         def friendlyName = pumpInfo.friendlyName
          def name = pumpInfo.name
-         sendEvent(name: "friendlyName", value: friendlyName, isStateChange: true, displayed: false)         
+         def name = pumpInfo.name
+         sendEvent(name: "name", value: name, isStateChange: true, displayed: false)         
          def mode = pumpInfo.mode
          def rpm = pumpInfo.rpm
          sendEvent(name: 'level', value: rpm)
