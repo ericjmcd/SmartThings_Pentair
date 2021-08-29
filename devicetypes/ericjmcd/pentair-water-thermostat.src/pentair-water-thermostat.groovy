@@ -12,7 +12,7 @@
  *
  */
 metadata {
-    definition (name: "Pentair Water Thermostat", namespace: "bsileo", author: "Brad Sileo") {
+    definition (name: "Pentair Water Thermostat", namespace: "ericjmcd", author: "Eric J McDonald") {
         capability "Actuator"
         capability "Temperature Measurement"
         capability "Thermostat"
@@ -32,8 +32,8 @@ metadata {
         standardTile("mode", "device.thermostatMode", width:2, height:2, inactiveLabel: false, decoration: "flat") {
             state "OFF",  action:"nextMode",  nextState: "updating", icon: "st.thermostat.heating-cooling-off"
             state "Heater", action:"nextMode", nextState: "updating", icon: "st.thermostat.heat"                
-            state "Solar Only", label:'${currentValue}', action:"nextMode",  nextState: "updating", icon: "https://bsileo.github.io/SmartThings_Pentair/solar-only.png"
-            state "Solar Pref", label:'${currentValue}', action:"nextMode",  nextState: "updating", icon: "https://bsileo.github.io/SmartThings_Pentair/solar-preferred.jpg"
+            state "Solar Only", label:'${currentValue}', action:"nextMode",  nextState: "updating", icon: "https://ericjmcd.github.io/SmartThings_Pentair/solar-only.png"
+            state "Solar Pref", label:'${currentValue}', action:"nextMode",  nextState: "updating", icon: "https://ericjmcd.github.io/SmartThings_Pentair/solar-preferred.jpg"
             state "updating", label:"Updating...", icon: "st.Home.home1"
         }
                

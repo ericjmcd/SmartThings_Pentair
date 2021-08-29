@@ -1,12 +1,12 @@
 # SmartThings_Pentair
 Smarthings UI for use with the nodjs-PoolController
 
-# DEPRECATED
+# Being Revitalized
 
-This repository and the code in it is at end of life. It has been replaced by the version found [here](https://github.com/bsileo/hubitat_poolcontroller).
+This repository and the code in it was at end of life. It was replaced by the version found [here](https://github.com/bsileo/hubitat_poolcontroller).
 
-The new version is much improved on the Nodejs-PoolController side and with the device drivers / App interface in SmartThings. It is also fully compatible with Hubitat and will continue to be updated going forwqard across both platforms.  The new version is *not* backwards compatible with this version so it will create all new devices for use in SmartThings. 
-
+This version is aimed at compatibility with the improved Nodejs-PoolController and with the device drivers / App interface in SmartThings.
+ 
 --------------------------------------------
 --------------------------------------------
 
@@ -14,7 +14,7 @@ The new version is much improved on the Nodejs-PoolController side and with the 
 
 SmartThings_Pentair.  
 An application to control pool equipment from within Smartthings.
-Copyright (C) 2017-2018  Brad Sileo / bsileo / brad@sileo.name
+Copyright (C) 2017-2018  Eric J McDonald / ericjmcd / brad@sileo.name
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 A collection of devices designed to interface with a nodejs-poolControlller instance which is talking on the RS-485 bus to allow viewing and setting pool control options. Includes devices to manage the Pool pump, lights and heater, the spa pump and heater, the chlorinator, and any installed additional "Features". 
 
 
-<img src="https://github.com/bsileo/SmartThings_Pentair/blob/master/SmartthingsPoolControlScreenshot-IB.jpg" height="300">
+<img src="https://github.com/ericjmcd/SmartThings_Pentair/blob/master/SmartthingsPoolControlScreenshot-IB.jpg" height="300">
 
 ***
 
@@ -61,7 +61,7 @@ A collection of devices designed to interface with a nodejs-poolControlller inst
   
       **Owner | Name | Branch**
       
-	  bsileo | SmartThings_Pentair | Master
+	  ericjmcd | SmartThings_Pentair | Master
 	  
     3. Click OK
     4. Click "Update from Repo" and select SmartThings_Pentair
@@ -74,7 +74,7 @@ A collection of devices designed to interface with a nodejs-poolControlller inst
 		1. Go to [https://graph.api.smartthings.com/ide/apps]
 		2. Hit the "+New SmartApp" at the top right corner
 		3. Hit the "From Code" tab on the left corner
-		4. Copy and paste the code from https://github.com/bsileo/SmartThings_Pentair/blob/master/smartapps/bsileo/pool-controller.src/pool-controller.groovy
+		4. Copy and paste the code from https://github.com/ericjmcd/SmartThings_Pentair/blob/master/smartapps/ericjmcd/pool-controller.src/pool-controller.groovy
 		5. Hit the create button at the bottom
 		6. Hit the "publish/for me" button at the top right corner (in the code window)
 
@@ -91,7 +91,7 @@ A collection of devices designed to interface with a nodejs-poolControlller inst
 		 1. Go to [https://graph.api.smartthings.com/ide/devices]
 		 2. Hit the "+New Device Type" at the top right corner
 		 3. Hit the "From Code" tab on the left corner
-		 4. Copy and paste the code from https://github.com/bsileo/SmartThings_Pentair/tree/master/devicetypes/bsileo/
+		 4. Copy and paste the code from https://github.com/ericjmcd/SmartThings_Pentair/tree/master/devicetypes/ericjmcd/
 		 5. Hit the create button at the bottom
 		 6. Hit the "publish/for me" button at the top right corner (in the code window)
 

@@ -1,7 +1,7 @@
 /**
  *  Service Manager for attaching SmartThings to a nodejsPoolController through python proxy
  *
- *  Copyright 2018 Brad Sileo
+ *  Copyright 2018 Eric J McDonald
  *  Modifications Copyright 2021 Eric J McDonald <ericjmcd@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as 

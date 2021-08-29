@@ -1,8 +1,8 @@
 /**
- * Copyright 2019 Brad Sileo brad@sileo.name
+ * Copyright 2019 Eric J McDonald brad@sileo.name
  */
 metadata {
-    definition (name: "Pentair Pump Control", namespace: "bsileo", author: "Brad Sileo") {
+    definition (name: "Pentair Pump Control", namespace: "ericjmcd", author: "Eric J McDonald") {
     capability "Switch"
         capability "Switch Level"
         capability "Power Meter"

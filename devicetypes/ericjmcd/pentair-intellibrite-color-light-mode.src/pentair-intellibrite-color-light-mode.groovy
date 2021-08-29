@@ -1,15 +1,15 @@
 /**
- *  Copyright 2018 Brad Sileo
+ *  Copyright 2018 Eric J McDonald
  *
  *
  *  Intellibrite Color Mode Tile
  *
- *  Author: Brad Sileo
+ *  Author: Eric J McDonald
  *
  *  Date: 2018-10-21
  */
 metadata {
-    definition (name: "Pentair Intellibrite Color Light Mode", namespace: "bsileo", author: "Brad Sileo") {
+    definition (name: "Pentair Intellibrite Color Light Mode", namespace: "ericjmcd", author: "Eric J McDonald") {
         capability "Actuator"
         capability "Switch"
         capability "Momentary"
@@ -26,12 +26,12 @@ metadata {
             state "off", label: "", action: "momentary.push", backgroundColor: "#ffffff", nextState: "on"
             state "on", label: "", action: "momentary.push", icon:"st.Lighting.light21", backgroundColor: "#ffffff"
 
-            state "Party", label:"", action:"momentary.push", icon:"https://bsileo.github.io/SmartThings_Pentair/party.png", backgroundColor:"#4250f4", nextState:"on"
-            state "Romance", label:"", action:"momentary.push", icon:"https://bsileo.github.io/SmartThings_Pentair/romance.png", backgroundColor:"#d28be8", nextState:"on"
-            state "Caribbean", label:"", action:"momentary.push", icon:"https://bsileo.github.io/SmartThings_Pentair/caribbean.png", backgroundColor:"#46f2e9", nextState:"on"        
-            state "American", label:"", action:"momentary.push", icon:"https://bsileo.github.io/SmartThings_Pentair/american.png", backgroundColor:"#d42729", nextState:"on"        
-            state "Sunset", label:"", action:"momentary.push", icon:"https://bsileo.github.io/SmartThings_Pentair/sunset.png", backgroundColor:"#ffff00", nextState:"on"        
-            state "Royal", label:"", action:"momentary.push", icon:"https://bsileo.github.io/SmartThings_Pentair/royal.png", backgroundColor:"#9933ff", nextState:"on"        
+            state "Party", label:"", action:"momentary.push", icon:"https://ericjmcd.github.io/SmartThings_Pentair/party.png", backgroundColor:"#4250f4", nextState:"on"
+            state "Romance", label:"", action:"momentary.push", icon:"https://ericjmcd.github.io/SmartThings_Pentair/romance.png", backgroundColor:"#d28be8", nextState:"on"
+            state "Caribbean", label:"", action:"momentary.push", icon:"https://ericjmcd.github.io/SmartThings_Pentair/caribbean.png", backgroundColor:"#46f2e9", nextState:"on"        
+            state "American", label:"", action:"momentary.push", icon:"https://ericjmcd.github.io/SmartThings_Pentair/american.png", backgroundColor:"#d42729", nextState:"on"        
+            state "Sunset", label:"", action:"momentary.push", icon:"https://ericjmcd.github.io/SmartThings_Pentair/sunset.png", backgroundColor:"#ffff00", nextState:"on"        
+            state "Royal", label:"", action:"momentary.push", icon:"https://ericjmcd.github.io/SmartThings_Pentair/royal.png", backgroundColor:"#9933ff", nextState:"on"        
 
             state "Blue", label:"Blue", action: "momentary.push", icon:"st.Lighting.light21", backgroundColor:"#0000FF", nextState:"on"
             state "Green", label:"Green", action: "momentary.push", icon:"st.Lighting.light21", backgroundColor:"#33cc33", nextState:"on"

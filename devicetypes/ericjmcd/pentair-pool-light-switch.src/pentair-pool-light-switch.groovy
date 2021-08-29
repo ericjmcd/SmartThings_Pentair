@@ -12,7 +12,7 @@
  *
  */
 metadata {
-    definition (name: "Pentair Pool Light Switch", namespace: "bsileo", author: "Brad Sileo") {
+    definition (name: "Pentair Pool Light Switch", namespace: "ericjmcd", author: "Eric J McDonald") {
         capability "Switch"
         command onConfirmed
         command offConfirmed

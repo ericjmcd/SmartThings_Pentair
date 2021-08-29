@@ -12,7 +12,7 @@
  *
  */
 metadata {
-    definition (name: "Pentair Spa Pump Control", namespace: "bsileo", author: "Brad Sileo") {
+    definition (name: "Pentair Spa Pump Control", namespace: "ericjmcd", author: "Eric J McDonald") {
     capability "Switch"
         command onConfirmed
         command offConfirmed
@@ -35,10 +35,10 @@ metadata {
     tiles {
         multiAttributeTile(name:"switch", type: "generic", width: 1, height: 1, canChangeIcon: true)  {
             tileAttribute("device.switch", key: "PRIMARY_CONTROL") {
-                 attributeState "off",  label:"Off", action:"on", nextState: "turningOn", icon: "https://bsileo.github.io/SmartThings_Pentair/spa.png",backgroundColor: "#ffffff"
-                attributeState "on", label:"On", action:"off",  nextState: "turningOff", icon: "https://bsileo.github.io/SmartThings_Pentair/spa.png",backgroundColor: "#00a0dc"
-                attributeState "turningOn", label:'${name}', icon:"https://bsileo.github.io/SmartThings_Pentair/spa.png", backgroundColor:"#00a0dc", nextState: "on"
-                attributeState "turningOff", label:'${name}', icon:"https://bsileo.github.io/SmartThings_Pentair/spa.png", backgroundColor:"#ffffff", nextState: "off"                      
+                 attributeState "off",  label:"Off", action:"on", nextState: "turningOn", icon: "https://ericjmcd.github.io/SmartThings_Pentair/spa.png",backgroundColor: "#ffffff"
+                attributeState "on", label:"On", action:"off",  nextState: "turningOff", icon: "https://ericjmcd.github.io/SmartThings_Pentair/spa.png",backgroundColor: "#00a0dc"
+                attributeState "turningOn", label:'${name}', icon:"https://ericjmcd.github.io/SmartThings_Pentair/spa.png", backgroundColor:"#00a0dc", nextState: "on"
+                attributeState "turningOff", label:'${name}', icon:"https://ericjmcd.github.io/SmartThings_Pentair/spa.png", backgroundColor:"#ffffff", nextState: "off"                      
             }
             // Note - this Approach works to display this name in the Child Device but does not carry through to the parent. Multi-attribute tiles do not work on a childTile??
             tileAttribute ("device.friendlyName", key: "SECONDARY_CONTROL") {

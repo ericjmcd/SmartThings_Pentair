@@ -12,7 +12,7 @@
  *
  */
 metadata {
-    definition (name: "Pentair Temperature Measurement Capability", namespace: "bsileo", author: "SmartThings") {
+    definition (name: "Pentair Temperature Measurement Capability", namespace: "ericjmcd", author: "SmartThings") {
         capability "Temperature Measurement"
     }
 
