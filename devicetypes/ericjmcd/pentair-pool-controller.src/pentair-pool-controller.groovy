@@ -206,8 +206,9 @@ def updated() {
 def manageChildren() {
     log.debug "Pool Controller manageChildren..."
     def hub = location.hubs[0]    
+    /*
     def poolHeat = childDevices.find({it.deviceNetworkId == getChildDNI("poolHeat")})    
-    /*if (!poolHeat) {
+    if (!poolHeat) {
         poolHeat = addChildDevice("ericjmcd","Pentair Water Thermostat", getChildDNI("poolHeat"), hub.id, 
                                   [completedSetup: true, label: "${device.displayName} (Pool Heat)" , isComponent:false, componentName: "poolHeat", componentLabel:"${device.displayName} (Pool Heat)" ])
         log.debug "Created PoolHeat" 
@@ -434,19 +435,19 @@ def manageCircuits() {
 def manageFeatureCircuits() {
     def hub = location.hubs[0]   
     def nLCircuits = parent.state.nonLightCircuits
-    nLCircuits.each {i,k ->
-        def cData = parent.state.circuitData[i.toString()]
-        log.debug("Handling circuit: " + cData.name)
-        if (cData.name == "Not Used" || cData.name == "NOT USED") return        
+    log.debug("Circuits: " + nonLightCircuits)
+    nLCircuits.each {i,circuit ->
+        log.debug("Handling circuit: " + circuit.name)
+        if (circuit.name == "Not Used" || circuit.name == "NOT USED") return        
         def auxname = "circuit${i}"        
-        def auxLabel = "${device.displayName} (${cData.name})"        
+        def auxLabel = "${device.displayName} (${circuit.name})"        
         try {
             def auxButton = childDevices.find({it.deviceNetworkId == getChildDNI(auxname)})
             if (!auxButton) {
                 log.info "Create Aux Circuit switch ${auxLabel} Named=${auxname}" 
                 auxButton = addChildDevice("ericjmcd","Pentair Pool Control Switch", getChildDNI(auxname), hub.id, 
                                            [completedSetup: true, label: auxLabel , isComponent:false, componentName: auxname, componentLabel: auxLabel, 
-                                           data: [type:cData.circuitFunction]
+                                           data: [type:circuit.type]
                                            ])
                 log.debug "Success - Created Aux switch ${i}" 
             }
